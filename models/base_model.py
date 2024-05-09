@@ -10,7 +10,7 @@ class BaseModel:
 
 
     def __str__(self):
-        return f"[Person] {self.id} {self.__dict__}"
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
     
 
     def save(self):
@@ -19,10 +19,22 @@ class BaseModel:
     
     def to_dict(self):
         my_dict = self.__dict__.copy()
-        my_dict["__class__"] = "BaseModel"
+        my_dict["__class__"] = self.__class__.__name__
         my_dict["created_at"] = datetime.datetime.isoformat(my_dict["created_at"])
         my_dict["updated_at"] = datetime.datetime.isoformat(my_dict["updated_at"])
-        print(my_dict)
+        return my_dict
+
+
+
+my_model = BaseModel()
+my_model.name = "My First Model"
+my_model.my_number = 89
+print(my_model)
+my_model.save()
+print(my_model)
+my_model_json = my_model.to_dict()
+print(my_model_json)
+
 
 
 
