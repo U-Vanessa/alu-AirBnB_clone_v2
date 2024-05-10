@@ -1,4 +1,5 @@
 import unittest
+import time
 from models.base_model import BaseModel
 
 class TestBaseModel(unittest.TestCase):
@@ -31,6 +32,13 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('id', str_repr)
         self.assertIn('created_at', str_repr)
         self.assertIn('updated_at', str_repr)
+
+
+    def test_save(self):
+        first_time = self.model.created_at
+        time.sleep(0.001)
+        self.model.save()
+        self.assertNotEqual(first_time, self.model.updated_at)
 
     
 
