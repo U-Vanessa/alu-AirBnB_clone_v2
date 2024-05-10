@@ -34,12 +34,27 @@ class TestBaseModel(unittest.TestCase):
         self.assertIn('updated_at', str_repr)
 
 
-    def test_save(self):
-        first_time = self.model.created_at
-        time.sleep(0.001)
-        self.model.save()
-        self.assertNotEqual(first_time, self.model.updated_at)
+    def test_save_updates_updated_at(self):
+        # Create an instance of BaseModel
+        model = BaseModel()
 
+        # Get the initial updated_at timestamp
+        initial_updated_at = model.updated_at
+
+        # Call the save method
+        model.save()
+
+        # Get the updated updated_at timestamp
+        updated_updated_at = model.updated_at
+
+        # Assert that updated_at has been updated
+        self.assertNotEqual(initial_updated_at, updated_updated_at)
+
+        # Assert that the new updated_at is approximately now
+        # We use a small sleep to ensure that time has passed between save and checking
+        time.sleep(0.001)
+        now = datetime.now()
+        self.assertAlmostEqual(updated_updated_at, now, delta=datetime.timedelta(seconds=1))
     
 
 
