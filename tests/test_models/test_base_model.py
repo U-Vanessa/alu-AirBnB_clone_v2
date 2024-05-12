@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+#Writing the Unit Tests
+
 import unittest
 import time
 from models.base_model import BaseModel
@@ -5,6 +8,7 @@ from models.base_model import BaseModel
 class TestBaseModel(unittest.TestCase):
 
     def setUp(self):
+        """ Create a instance at the beginning of every test """
         self.model = BaseModel()
 
 

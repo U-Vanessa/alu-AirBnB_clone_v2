@@ -1,10 +1,17 @@
+#!/usr/bin/python3
+#Defining the Base model class
+
 import uuid
 import datetime
-import time
 
 
 class BaseModel:
     def __init__(self, *args, **kwargs):
+        """ Defines common attributes:
+            id: string - UUID assigned at instance creation.
+            created_at: datetime - set to current datetime at instance creation.
+            updated_at: datetime - set to current datetime at instance creation, updated on object change. """
+
         if kwargs:
             for key,value in kwargs.items():
                 if key != "__class__":
@@ -27,6 +34,8 @@ class BaseModel:
 
     
     def to_dict(self):
+        """ Return a dictionary representing the class instance. """
+
         my_dict = self.__dict__.copy()
         my_dict["__class__"] = self.__class__.__name__
         my_dict["created_at"] = datetime.datetime.isoformat(my_dict["created_at"])
