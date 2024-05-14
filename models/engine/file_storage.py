@@ -1,4 +1,5 @@
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -27,14 +28,15 @@ class FileStorage:
             pass
 
     
-    def reload(self):
-         try:
+    def reload(self, BaseModelClass):  # Pass BaseModel class as parameter
+        try:
             with open(self.__file_path, 'r') as file:
                 obj_dict = json.load(file)
 
                 for key, value in obj_dict.items():
-                    self.__objects[key] = eval(
-                        f"{value['__class__']}(**{value})")
+                    class_name = value['__class__']
+                    cls = eval(class_name) if class_name in globals() else BaseModelClass
+                    self.__objects[key] = cls(**value)
 
-         except FileNotFoundError:
+        except FileNotFoundError:
             pass

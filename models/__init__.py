@@ -1,6 +1,5 @@
 from models.engine.file_storage import FileStorage
+from models.base_model import BaseModel
 
-# Create a unique FileStorage instance
 storage = FileStorage()
-# Call reload() method to load data from JSON file
-storage.reload()
+storage.reload(BaseModel)  # Pass BaseModel class as argument
