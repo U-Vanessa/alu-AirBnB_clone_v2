@@ -3,6 +3,8 @@
 
 import uuid
 import datetime
+from models import storage
+
 
 
 class BaseModel:
@@ -11,6 +13,7 @@ class BaseModel:
             id: string - UUID assigned at instance creation.
             created_at: datetime - set to current datetime at instance creation.
             updated_at: datetime - set to current datetime at instance creation, updated on object change. """
+
 
         if kwargs:
             for key,value in kwargs.items():
@@ -23,6 +26,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
+            storage.new(self)
 
 
     def __str__(self):
@@ -31,6 +35,7 @@ class BaseModel:
 
     def save(self):
         self.updated_at = datetime.datetime.now()
+        storage.save()
 
     
     def to_dict(self):
@@ -43,8 +48,13 @@ class BaseModel:
         return my_dict
 
 
+ 
 
 
-
-
-
+ 
+ 
+ 
+ 
+ 
+p = BaseModel()
+print(p)
