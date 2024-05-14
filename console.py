@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+"""Module for console.py."""
 import cmd
 
 class HBNBCommand(cmd.Cmd):
