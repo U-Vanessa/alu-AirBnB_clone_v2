@@ -47,14 +47,3 @@ class BaseModel:
         my_dict["updated_at"] = datetime.datetime.isoformat(my_dict["updated_at"])
         return my_dict
 
-
- 
-
-
- 
- 
- 
- 
- 
-p = BaseModel()
-print(p)
