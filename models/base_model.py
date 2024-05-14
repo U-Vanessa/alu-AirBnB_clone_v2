@@ -6,6 +6,7 @@ import datetime
 from models import storage
 
 
+
 class BaseModel:
     def __init__(self, *args, **kwargs):
         """ Defines common attributes:
@@ -45,4 +46,3 @@ class BaseModel:
         my_dict["created_at"] = datetime.datetime.isoformat(my_dict["created_at"])
         my_dict["updated_at"] = datetime.datetime.isoformat(my_dict["updated_at"])
         return my_dict
-
