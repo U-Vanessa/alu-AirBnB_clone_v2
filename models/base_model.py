@@ -3,7 +3,7 @@
 
 import uuid
 import datetime
-from models import storage
+
 
 
 
@@ -14,7 +14,7 @@ class BaseModel:
             created_at: datetime - set to current datetime at instance creation.
             updated_at: datetime - set to current datetime at instance creation, updated on object change. """
 
-
+        from models import storage
         if kwargs:
             for key,value in kwargs.items():
                 if key != "__class__":
@@ -34,6 +34,7 @@ class BaseModel:
     
 
     def save(self):
+        from models import storage
         self.updated_at = datetime.datetime.now()
         storage.save()
 
