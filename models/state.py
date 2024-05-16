@@ -1,8 +1,12 @@
-#!/usr/bin/python3
-"""Importation"""
+#! /usr/bin/python3
+""" 
+This modules contains the state class
+"""
+
 from models.base_model import BaseModel
 
-
 class State(BaseModel):
-    """class for state"""
+    """ 
+    State class
+    """
     name = ""

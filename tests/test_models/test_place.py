@@ -1,83 +1,134 @@
-#!/usr/bin/python3
-"""test file for place class"""
+#! /usr/bin/python3
 
 import unittest
+import os
+
+from models import storage
 from models.place import Place
+from models.base_model import BaseModel
 
-class TestUserModel(unittest.TestCase):
-    """creating a testcase class that inherits from unittest.TestCase"""
+
+class TestPlace(unittest.TestCase):
+    """
+    Unit test class for Place
+    """
+
     def setUp(self):
-        """setting up the object for testing"""
-        self.place_model = Place()
+        """
+        Creates a temporary test file and saves it.
+        """
+        # Create a temporary test file
+        with open("test_file.json", "w") as f:
+            pass
 
-    def test_instance(self):
-        self.assertIsInstance(self.place_model, Place)    
+        # Save the file
+        storage.save()
+    
+    def tearDown(self):
+        """
+        Removes the temporary test file if it exists.
+        """
+        try:
+            # Try removing the test file
+            os.remove("test_file.json")
+        except FileNotFoundError:
+            # Ignore if the file doesn't exist
+            pass
+    
+    def test_place_attributes(self):
+        """
+        Tests the default values of Place attributes.
+        """
+        # Create a new Place instance
+        place = Place()
 
-    def test_name(self): 
-        self.assertIsInstance(self.place_model.name, str)
-        self.assertEqual(self.place_model.name, "")
-        self.place_model.name = "KMJ"   
-        self.assertEqual(self.place_model.name, "KMJ")
+        # Assert that city_id, user_id, name, and description are empty strings
+        self.assertEqual(place.city_id, "")
+        self.assertEqual(place.user_id, "")
+        self.assertEqual(place.name, "")
+        self.assertEqual(place.description, "")
+        self.assertEqual(place.number_rooms, 0)
+        self.assertEqual(place.number_bathrooms, 0)
+        self.assertEqual(place.max_guest, 0)
+        self.assertEqual(place.price_by_night, 0)
+        self.assertEqual(place.latitude, 0.0)
+        self.assertEqual(place.longitude, 0.0)
+        self.assertEqual(place.amenity_ids, [])
+    
+    def test_place_inherits_from_basemodel(self):
+        """
+        Tests that Place inherits from BaseModel.
+        """
+        # Create a new Place instance
+        place = Place()
 
-    def test_user_id(self): 
-        self.assertIsInstance(self.place_model.user_id, str)
-        self.assertEqual(self.place_model.user_id, "")
-        self.place_model.user_id = "1234"   
-        self.assertEqual(self.place_model.user_id, "1234")
+        # Assert that Place is a subclass of BaseModel
+        self.assertTrue(issubclass(type(place), BaseModel))
+    
+    def test_place_to_dict(self):
+        """
+        Tests the to_dict method of Place.
+        """
+        # Create a new Place instance
+        place = Place()
+        place.city_id = "123"
+        place.user_id = "456"
+        place.name = "Far away from home"
+        place.description = "No tenant needed"
+        place.number_rooms = 1
+        place.number_bathrooms = 1
+        place.max_guest = 1
+        place.price_by_night = 1
+        place.latitude = 1.0
+        place.longitude = 1.0
+        place.amenity_ids = ["amenity_id1"]
 
-    def test_city_id(self): 
-        self.assertIsInstance(self.place_model.city_id, str)
-        self.assertEqual(self.place_model.city_id, "")
-        self.place_model.city_id = "5678"   
-        self.assertEqual(self.place_model.city_id, "5678") 
+        # Get the dictionary representation of Place
+        place_dict = place.to_dict()
 
-    def test_desc(self): 
-        self.assertIsInstance(self.place_model.description, str)
-        self.assertEqual(self.place_model.description, "")
-        self.place_model.description = "hello world"   
-        self.assertEqual(self.place_model.description, "hello world") 
-        
-    def test_rooms(self): 
-        self.assertIsInstance(self.place_model.number_rooms, int)
-        self.assertEqual(self.place_model.number_rooms, 0)
-        self.place_model.number_rooms = 34   
-        self.assertEqual(self.place_model.number_rooms, 34)
+        # Assert that the dictionary is formatted correctly
+        self.assertEqual(place_dict["__class__"], "Place")
+        self.assertEqual(place_dict["id"], place.id)
+        self.assertEqual(place_dict["created_at"], place.created_at.isoformat())
+        self.assertEqual(place_dict["updated_at"], place.updated_at.isoformat())
+        self.assertEqual(place_dict["city_id"], place.city_id)
+        self.assertEqual(place_dict["user_id"], place.user_id)
+        self.assertEqual(place_dict["name"], place.name)
+        self.assertEqual(place_dict["description"], place.description)
+        self.assertEqual(place_dict["number_rooms"], place.number_rooms)
+        self.assertEqual(place_dict["number_bathrooms"], place.number_bathrooms)
+        self.assertEqual(place_dict["max_guest"], place.max_guest)
+        self.assertEqual(place_dict["price_by_night"], place.price_by_night)
+        self.assertEqual(place_dict["latitude"], place.latitude)
+        self.assertEqual(place_dict["longitude"], place.longitude)
+        self.assertEqual(place_dict["amenity_ids"], place.amenity_ids)
+    
+    def test_place_string_representation(self):
+        """
+        Tests the string representation of Place.
+        """
+        # Create a new Place instance
+        place = Place()
 
-    def test_bathrooms(self): 
-        self.assertIsInstance(self.place_model.number_bathrooms, int)
-        self.assertEqual(self.place_model.number_bathrooms, 0)
-        self.place_model.number_bathrooms = 34  
-        self.assertEqual(self.place_model.number_bathrooms, 34)   
+        # Get the string representation of Place
+        place_str = str(place)
 
-    def test_guest(self): 
-        self.assertIsInstance(self.place_model.max_guest, int)
-        self.assertEqual(self.place_model.max_guest, 0)
-        self.place_model.max_guest = 50   
-        self.assertEqual(self.place_model.max_guest, 50)   
+        # Assert that the string representation is formatted correctly
+        self.assertEqual(place_str, f"[Place] ({place.id}) {place.__dict__}")
+    
+    def test_place_save(self):
+        """
+        Tests the save method of Place.
+        """
+        # Create a new Place instance
+        place = Place()
 
-    def test_price(self): 
-        self.assertIsInstance(self.place_model.price_by_night, int)
-        self.assertEqual(self.place_model.price_by_night, 0)
-        self.place_model.price_by_night = 5000  
-        self.assertEqual(self.place_model.price_by_night, 5000)                         
-            
-    def test_latitude(self): 
-        self.assertIsInstance(self.place_model.latitude, float)
-        self.assertEqual(self.place_model.latitude, 0.0)
-        self.place_model.latitude = 34.0   
-        self.assertEqual(self.place_model.latitude, 34.0)   
+        # Save the place
+        place.save()
 
-    def test_longitude(self): 
-        self.assertIsInstance(self.place_model.longitude, float)
-        self.assertEqual(self.place_model.longitude, 0.0)
-        self.place_model.longitude = 54.0   
-        self.assertEqual(self.place_model.longitude, 54.0)   
+        # Assert that the place was added to the storage
+        self.assertIn(f"Place.{place.id}", storage.all())
 
-    def test_amenity_ids(self):
-        self.assertIsInstance(self.place_model.amenity_ids, list)
-        self.assertEqual(self.place_model.amenity_ids, [])
-        self.place_model.amenity_ids = ["1", "2", "3"]
-        self.assertEqual(self.place_model.amenity_ids, ["1","2","3"])
-            
+
 if __name__ == "__main__":
     unittest.main()

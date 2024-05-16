@@ -1,13 +1,13 @@
-#!/usr/bin/python3
-"""Importation"""
+#! /usr/bin/python3
+"""This module contains the Place class"""
+
 from models.base_model import BaseModel
 
-
 class Place(BaseModel):
-    """place class"""
-    name = ""
+    """Place class that inherits from BaseModel"""
     city_id = ""
     user_id = ""
+    name = ""
     description = ""
     number_rooms = 0
     number_bathrooms = 0

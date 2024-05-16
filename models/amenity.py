@@ -1,8 +1,9 @@
-#!/usr/bin/python3
-"""Importation"""
+#! /usr/bin/python3
+""" This module contains the Amenity class """
+
 from models.base_model import BaseModel
 
-
 class Amenity(BaseModel):
-    """amenity class"""
+    """ This class defines Amenity class """
+
     name = ""
