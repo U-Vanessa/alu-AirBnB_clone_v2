@@ -1,68 +1,71 @@
-#! /usr/bin/python3
+#!/usr/bin/python3
+"""
+This module defines a FileStorage class that stores
+and retrieves objects to and from a JSON file.
+"""
 
 import json
-import os
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
 from models.city import City
-from models.amenity import Amenity 
+from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 
+
 class FileStorage:
     """
-    This class represents a file storage system for storing and retrieving objects in JSON format.
+    A file storage system for storing and retrieving objects.
     """
+
     __file_path = "file.json"
     __objects = {}
 
     def all(self):
         """
         Returns the dictionary of all objects currently stored.
+
+        Returns:
+            dict: A dictionary of all objects currently stored.
         """
         return FileStorage.__objects
 
     def new(self, obj):
         """
-        Adds a new object to the storage system.
+        Adds a new object to the storage.
 
         Args:
-            obj: The object to be added.
+            obj (object): The object to be added to the storage.
         """
-        key = f"{obj.__class__.__name__}.{obj.id}"
-        FileStorage.__objects[key] = obj
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
         """
-        Saves all objects in the storage system to a JSON file.
+        Saves the objects in the storage to a JSON file.
         """
-        all_objects = FileStorage.__objects
         obj_dict = {}
-        for key, value in all_objects.items():
+
+        for key, value in self.__objects.items():
             obj_dict[key] = value.to_dict()
-        with open(FileStorage.__file_path, "w") as file:
-            json.dump(obj_dict, file)    
-        
+
+        try:
+            with open(self.__file_path, 'w') as file:
+                json.dump(obj_dict, file, indent=2)
+        except FileNotFoundError:
+            pass
+
     def reload(self):
         """
-        Loads objects from a JSON file into the storage system.
+        Reloads the objects from the JSON file into the storage.
         """
         try:
-            with open(FileStorage.__file_path, "r") as file:
+            with open(FileStorage.__file_path, 'r') as file:
                 obj_dict = json.load(file)
+
                 for key, value in obj_dict.items():
-                    class_name, obj_id = key.split(".")
-                    cls = eval(class_name)
-                    inst = cls(**value)
-                    FileStorage.__objects[key] = inst
-        except:
+                    self.__objects[key] = eval(
+                        f"{value['__class__']}(**{value})")
+
+        except FileNotFoundError:
             pass
-    
-    # For testing purposes only
-    def reset(self):
-        """
-        Resets the storage system by clearing all objects.
-        """
-        self._FileStorage__objects = {}
-        
