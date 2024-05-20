@@ -11,10 +11,9 @@ class State(BaseModel):
     This is the state class
 
     Attributes:
-        name (str): The name of the state
+        name (str)
     """
     name = ""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.name = State.name

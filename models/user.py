@@ -11,10 +11,10 @@ class User(BaseModel):
     This is the user class.
 
     Attributes:
-        email (str): The email address of the user.
-        password (str): The password of the user.
-        first_name (str): The first name of the user.
-        last_name (str): The last name of the user.
+        email (str)
+        password (str)
+        first_name (str)
+        last_name (str)
     """
     email = ""
     password = ""
@@ -27,7 +27,4 @@ class User(BaseModel):
         """
         super().__init__(*args, **kwargs)
 
-        # self.email = User.email
-        # self.password = User.password
-        # self.first_name = User.first_name
-        # self.last_name = User.last_name
+
