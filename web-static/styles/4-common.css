@@ -10,6 +10,10 @@ body {
   padding-top: 70px;
 }
 
+ul {
+  list-style-type: none;
+}
+
 .container {
   max-width: 1000px;
   margin-block: 30px;
