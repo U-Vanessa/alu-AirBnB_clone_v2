@@ -1,27 +1,35 @@
 #!/usr/bin/python3
-"""This is the user class"""
+"""This is the state class"""
 from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from models.place import Place
-from models.review import Review
+from sqlalchemy import Column, Integer, String
+import models
+from models.city import City
+import shlex
 
 
-class User(BaseModel, Base):
-    """This is the class for user
+class State(BaseModel, Base):
+    """This is the class for State
     Attributes:
-        email: email address
-        password: password for you login
-        first_name: first name
-        last_name: last name
+        name: input name
     """
-    __tablename__ = "users"
-    email = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
-    first_name = Column(String(128))
-    last_name = Column(String(128))
-    places = relationship("Place", cascade='all, delete, delete-orphan',
-                          backref="user")
-    reviews = relationship("Review", cascade='all, delete, delete-orphan',
-                           backref="user")
+    __tablename__ = "states"
+    name = Column(String(128), nullable=False)
+    cities = relationship("City", cascade='all, delete, delete-orphan',
+                          backref="state")
+
+    @property
+    def cities(self):
+        var = models.storage.all()
+        lista = []
+        result = []
+        for key in var:
+            city = key.replace('.', ' ')
+            city = shlex.split(city)
+            if (city[0] == 'City'):
+                lista.append(var[key])
+        for elem in lista:
+            if (elem.state_id == self.id):
+                result.append(elem)
+        return (result)
